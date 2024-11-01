@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Complaints</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .complaint-card {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar a {
+            color: #ffffff !important;
+        }
+
+        .navbar a:hover {
+            color: #ffd700 !important;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <a class="navbar-brand" href="/admin_home">Admin Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_view_users">View Users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_view_published_books">View Published Books</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_view_feedback">View Feedbacks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_manage_complaints">Manage Complaints</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container mt-5">
+    <h2 class="mb-4">&nbsp;</h2>
+    <h2 class="mb-4">Manage Complaints</h2>
+
+    {% for complaint in complaints %}
+    <div class="card complaint-card">
+        <div class="card-body">
+            <h5 class="card-title">User: {{ complaint.USER.name }}</h5>
+            <p class="card-text"><strong>Complaint:</strong> {{ complaint.complaint }}</p>
+            <p class="card-text"><strong>Date:</strong> {{ complaint.date }}</p>
+            <p class="card-text"><strong>Reply:</strong>
+                {% if complaint.reply == 'pending' %}
+                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#replyModal"
+                       data-complaint-id="{{ complaint.id }}">Add Reply</a>
+                {% else %}
+                    {{ complaint.reply }}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-warning">No complaints found.</div>
+    {% endfor %}
+</div>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="replyModalLabel">Add Reply</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="replyForm" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <input type="hidden" name="complaint_id" id="complaint_id" value="">
+                    <div class="form-group">
+                        <label for="reply">Reply:</label>
+                        <textarea class="form-control" id="reply" name="reply" rows="3" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit Reply</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // jQuery to handle the modal
+    $('#replyModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var complaintId = button.data('complaint-id'); // Extract info from data-* attributes
+        var modal = $(this);
+        modal.find('#complaint_id').val(complaintId); // Set the hidden input value
+    });
+
+    // Handle the reply submission
+    $('#replyForm').on('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "add_reply" %}', // Ensure this URL is correct
+            data: $(this).serialize(), // Serialize the form data
+            success: function(response) {
+                // Handle successful response
+                // Replace the hyperlink with the reply text
+                var complaintId = $('#complaint_id').val();
+                var replyText = $('#reply').val();
+
+                // Update the UI
+                $('a[data-complaint-id="' + complaintId + '"]').parent().html(replyText);
+                $('#replyModal').modal('hide'); // Close the modal
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                alert("An error occurred while submitting the reply: " + error);
+            }
+        });
+    });
+</script>
+</body>
+</html>

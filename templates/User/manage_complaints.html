@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Complaints</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem;
+            z-index: 1;
+        }
+
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .navbar a:hover {
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+        <a href="/manage_profile">Manage Profile</a>
+        <a href="/manage_book">Manage Books</a>
+        <a href="/view_published_books">View Published Books</a>
+        <a href="/view_edit_request">View Editing Request</a>
+        <a href="/view_accepted_requests">View Accepted Request</a>
+        <a href="/manage_complaint">Manage Complaints</a>
+        <a href="/logout">Logout</a>
+    </div>
+<br><br>
+<div class="container mt-5">
+    <h2 class="mb-4">Manage Complaints</h2>
+    <a href="{% url 'add_new_complaint' %}" class="btn btn-success mt-4">Submit New Complaint</a><br><br>
+
+    {% if complaint %}
+        <div class="list-group">
+            {% for item in complaint %}
+                <div class="list-group-item">
+                    <h5 class="mb-1">Complaint Date: {{ item.date }}</h5>
+                    <p class="mb-1"><strong>Complaint:</strong> {{ item.complaint }}</p>
+                    <p class="mb-1"><strong>Reply:</strong> {{ item.reply }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            No complaints found.
+        </div>
+    {% endif %}
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

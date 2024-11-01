@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem;
+            z-index: 1;
+        }
+
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .navbar a:hover {
+            color: #ffd700;
+        }
+
+    </style>
+</head>
+<body>
+<div class="navbar">
+        <a href="/manage_profile">Manage Profile</a>
+        <a href="/manage_book">Manage Books</a>
+        <a href="/view_published_books">View Published Books</a>
+        <a href="/view_edit_request">View Editing Request</a>
+        <a href="/view_accepted_requests">View Accepted Request</a>
+        <a href="/manage_complaint">Manage Complaints</a>
+        <a href="/logout">Logout</a>
+    </div>
+<br><br>
+<div class="container mt-5">
+    <h2 class="mb-4">My Profile</h2>
+
+    <div class="card">
+        <div class="card-header">
+            Profile Information
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="{{ profile.photo.url }}" alt="Profile Photo" class="img-fluid rounded-circle mb-3" style="max-height: 200px;">
+                </div>
+                <div class="col-md-8">
+                    <h5>Name: {{ profile.name }}</h5>
+                    <p>Date of Birth: {{ profile.dob }}</p>
+                    <p>Phone: {{ profile.phone }}</p>
+                    <p>Email: {{ profile.email }}</p>
+                    <p>Place: {{ profile.place }}</p>
+                    <p>PIN: {{ profile.pin }}</p>
+                    <p>Post: {{ profile.post }}</p>
+                    <p>Gender: {{ profile.gender }}</p>
+                </div>
+            </div>
+
+            <a href="{% url 'edit_profile' %}" class="btn btn-primary mt-4">Edit Profile</a>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

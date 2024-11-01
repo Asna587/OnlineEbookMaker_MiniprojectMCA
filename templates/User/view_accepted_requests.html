@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accepted Edit Requests</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem;
+            z-index: 1;
+        }
+
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .navbar a:hover {
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+        <a href="/manage_profile">Manage Profile</a>
+        <a href="/manage_book">Manage Books</a>
+        <a href="/view_published_books">View Published Books</a>
+        <a href="/view_edit_request">View Editing Request</a>
+        <a href="/view_accepted_requests">View Accepted Request</a>
+        <a href="/manage_complaint">Manage Complaints</a>
+        <a href="/logout">Logout</a>
+    </div>
+<br><br>
+    <div class="container mt-5">
+        <h2>Accepted Edit Requests</h2>
+
+        {% if requests %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Book Name</th>
+                        <th>Requested By</th>
+                        <th>Date of Request</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                        <tr>
+                            <td>{{ request.BOOK.book_name }}</td>
+                            <td>{{ request.USER.name }}</td>
+                            <td>{{ request.date }}</td>
+                            <td>
+                                <a href="{% url 'edit_requested_book' request.BOOK.id %}" class="btn btn-primary">Edit Book</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No accepted requests available.</p>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

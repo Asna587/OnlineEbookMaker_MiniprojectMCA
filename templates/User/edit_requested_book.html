@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Requested Book</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Edit Book: {{ book.book_name }}</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="book_name">Book Name</label>
+                <input type="text" readonly class="form-control" id="book_name" name="book_name" value="{{ book.book_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" readonly name="description" rows="4" required>{{ book.description }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="thumbnail">Thumbnail</label>
+                <small class="form-text text-muted"><img src="{{ book.thumbnail.url }}" alt="Current Thumbnail" style="width: 100px; height: auto;"></small>
+            </div>
+            <div class="form-group">
+                <label for="file">Upload New File</label>
+                <p>Current File: <a href="{{ book.file.url }}" target="_blank">{{ book.file }}</a></p>
+            <input type="file" class="form-control-file" id="file" name="file" >
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="{% url 'view_accepted_requests' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

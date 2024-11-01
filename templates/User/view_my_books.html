@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Books</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .book-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .book-card {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            max-width: 23%; /* Ensures four cards fit in a row */
+            flex: 1;
+            margin-right: 15px;
+        }
+        .book-card h3 {
+            margin-top: 0;
+        }
+        .book-card p {
+            margin: 10px 0;
+        }
+        .book-card .date {
+            font-size: 0.9em;
+            color: #555;
+        }
+        .book-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .book-card a {
+            text-decoration: none;
+            color: white;
+            background-color: #28a745;
+            padding: 10px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .book-card a.edit {
+            background-color: #007bff;
+        }
+        .book-card a.delete {
+            background-color: #dc3545;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem;
+            z-index: 1;
+        }
+
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .navbar a:hover {
+            color: #ffd700;
+        }
+    </style>
+
+</head>
+<body>
+<div class="navbar">
+        <a href="/manage_profile">Manage Profile</a>
+        <a href="/manage_book">Manage Books</a>
+        <a href="/view_published_books">View Published Books</a>
+        <a href="/view_edit_request">View Editing Request</a>
+        <a href="/view_accepted_requests">View Accepted Request</a>
+        <a href="/manage_complaint">Manage Complaints</a>
+        <a href="/logout">Logout</a>
+    </div>
+<br><br>
+<a href="/add_new_book">Add New</a>
+<h2>My Books</h2>
+
+<div class="book-container">
+    {% for book in books %}
+    <div class="book-card">
+        <!-- Replace book.image with the actual field storing the image, if applicable -->
+        <img src="{{ book.thumbnail.url }}" alt="Book Image">
+        <h3>{{ book.book_name }}</h3>
+        <p>{{ book.description }}</p>
+        <p class="date">Uploaded on: {{ book.date_of_upload }}</p>
+        <p class="date">File: <a class="date" href="{{ book.file.url }}" target="_blank">{{ book.file }}</a></p>
+        <a href="{{ book.file.url }}" download>Download Book</a>
+        <a href="/edit_book/{{ book.id }}" class="edit">Edit</a>
+        <a href="/delete_book/{{ book.id }}" class="delete">Delete</a>
+    </div>
+    {% empty %}
+    <p>No books found.</p>
+    {% endfor %}
+</div>
+
+</body>
+</html>

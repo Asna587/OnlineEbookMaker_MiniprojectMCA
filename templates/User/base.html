@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <style>
+        /* Get Started button styling */
+        .get-started-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 2.5rem;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #ff4500;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            top: 5px;
+        }
+
+        .get-started-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .get-started-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/static/bgg.png'); /* Replace with your background image URL */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .background-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 0;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem;
+            z-index: 1;
+        }
+
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .navbar a:hover {
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-mask"></div>
+
+    <!-- Navbar Section -->
+    <div class="navbar">
+        <a href="/manage_profile">Manage Profile</a>
+        <a href="/manage_book">Manage Books</a>
+        <a href="/view_published_books">View Published Books</a>
+        <a href="/view_edit_request">View Editing Request</a>
+        <a href="/view_accepted_requests">View Accepted Request</a>
+        <a href="/manage_complaint">Manage Complaints</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Main Content Block -->
+    <div style="z-index: 2; margin-top: 70px; text-align: center;">
+        {% block body %}{% endblock %}
+    </div>
+</body>
+</html>

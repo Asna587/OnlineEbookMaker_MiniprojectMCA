@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Users</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Card styles */
+        .user-card {
+            width: 100%;
+            height: 450px; /* Fixed height */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+            /* Adding a shadow for a 3D effect */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-card:hover {
+            transform: translateY(-10px); /* Slightly lifts the card on hover */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
+        }
+
+        /* Image styles */
+        .user-card img {
+            max-height: 150px; /* Adjust the image height */
+            object-fit: cover; /* Maintain aspect ratio */
+        }
+
+        .card-title {
+            font-weight: bold;
+        }
+
+        .card-text {
+            margin-bottom: 5px; /* Space between text lines */
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar a {
+            color: #ffffff !important;
+        }
+
+        .navbar a:hover {
+            color: #ffd700 !important;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <a class="navbar-brand" href="/admin_home">Admin Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_view_users">View Users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_view_published_books">View Published Books</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_view_feedback">View Feedbacks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_manage_complaints">Manage Complaints</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+<div class="container mt-5">
+    <h2 class="mb-4">     </h2>
+    <br><h2 class="mb-4">View Users</h2>
+
+    <!-- Search Bar -->
+    <form method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" class="form-control" name="search" value="{{ query }}" placeholder="Search by name" required>
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+<div class="row">
+    {% for user in page_obj %}
+    <div class="col-md-4 mb-5">
+        <div class="card user-card">
+            <img src="{{ user.photo.url }}" class="card-img-top" alt="User Photo">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ user.name|capfirst }}</h5>
+                <p class="card-text">Email: {{ user.email }}</p>
+                <p class="card-text">Phone: {{ user.phone }}</p>
+                <p class="card-text">Place: {{ user.place }}</p>
+                <p class="card-text">Post: {{ user.post }}</p>
+                <p class="card-text">Gender: {{ user.gender }}</p>
+                <p class="card-text">Date of Birth: {{ user.dob }}</p>
+                <u><p style="color: black;margin-left: 110px; font-style: oblique;" class="card-text">Status: {{ user.LOGIN.type }}</p></u>
+
+                <!-- Flexbox for buttons -->
+                <div class="d-flex justify-content-between mt-auto">
+                    <a href="/block_user/{{ user.LOGIN.id }}" class="btn btn-danger btn-sm" role="button">Block</a>
+                    <a href="/unblock_user/{{ user.LOGIN.id }}" class="btn btn-primary btn-sm" role="button">Unblock</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <p>No users found.</p>
+    </div>
+    {% endfor %}
+</div>
+
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1&search={{ query }}" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ query }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            <li class="page-item disabled"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ query }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&search={{ query }}" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

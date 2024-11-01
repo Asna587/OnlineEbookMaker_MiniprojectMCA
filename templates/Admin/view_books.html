@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Published Books</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Card styles */
+        .book-card {
+            width: 100%;
+            height: 400px; /* Fixed height for the card */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+            background-color: #f8f9fa; /* Light background for contrast */
+            border: 1px solid #dee2e6; /* Border to define card edges */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        }
+
+        .book-card:hover {
+            transform: translateY(-10px); /* Lift effect */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+        }
+
+        .card-title {
+            font-weight: bold;
+            color: #007bff; /* Bootstrap primary color for title */
+        }
+
+        .card-text {
+            margin-bottom: 5px; /* Space between text lines */
+        }
+
+        /* Adjust image styles */
+        .book-card img {
+            max-height: 200px; /* Set maximum height for thumbnail */
+            object-fit: cover; /* Maintain aspect ratio */
+            border-top-left-radius: 10px; /* Round corners for the top */
+            border-top-right-radius: 10px; /* Round corners for the top */
+        }
+
+        /* Pagination styles */
+        .pagination {
+            justify-content: center; /* Center pagination */
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+
+        .navbar a {
+            color: #ffffff !important;
+        }
+
+        .navbar a:hover {
+            color: #ffd700 !important;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <a class="navbar-brand" href="/admin_home">Admin Dashboard</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_view_users">View Users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_view_published_books">View Published Books</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_view_feedback">View Feedbacks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin_manage_complaints">Manage Complaints</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h2 class="mb-4">   &nbsp;</h2>
+    <h2 class="mb-4">View Published Books</h2>
+
+    <div class="row">
+        {% for book in page_obj %}
+        <div class="col-md-4 mb-4">
+            <div class="card book-card">
+                <img src="{{ book.thumbnail.url }}" class="card-img-top" alt="{{ book.book_name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.book_name|capfirst }}</h5>
+                    <p class="card-text">Description: {{ book.description }}</p>
+                    <p class="card-text">Uploaded on: {{ book.date_of_upload }}</p>
+                    <h5>Uploaded By: {{ book.USER.name|capfirst }}</h5>
+                    <p>File: <a href="{{ book.file.url }}" target="_blank">{{ book.file }}</a></p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p>No books found.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            <li class="page-item disabled"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
